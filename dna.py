@@ -1,5 +1,5 @@
-# Programm using genetic algorithm to fit a kappa function
-# DNA  - A,B or A,B,C in the functions
+# Program using genetic algorithm to fit a kappa function
+# DNA structure  - A,B or A,B,C in the functions
 # created by Marcos Grala
 
 import numpy as np
