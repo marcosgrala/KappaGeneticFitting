@@ -1,5 +1,5 @@
-# Programm using genetic algorithm to fit a kappa function
-# functions needed to evolve the populations
+# Program using genetic algorithm to fit a kappa function
+# functions needed to evolve the population
 # created by Marcos Grala
 
 import numpy as np
