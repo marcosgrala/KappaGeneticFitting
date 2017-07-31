@@ -1,5 +1,5 @@
-# Programm using genetic algorithm to fit a kappa function
-# modified in 31/07/2017
+# Programm using genetic algorithm to fit data with kappa or maxwellian distributions
+# Created by Marcos Grala
 
 import numpy as np
 import random
