@@ -1,4 +1,4 @@
-# Programm using genetic algorithm to fit data with kappa or maxwellian distributions
+# Program using genetic algorithm to fit data with kappa or maxwellian distributions
 # Created by Marcos Grala
 
 import evolution as evo
