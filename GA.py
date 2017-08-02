@@ -1,6 +1,6 @@
 # Program using genetic algorithm to fit data with kappa or maxwellian distributions
 # Created by Marcos Grala
-
+import numpy as np
 import evolution as evo
 
 ######    main program           #################################################333      
@@ -9,12 +9,13 @@ def main():
     threshold = 0.10 # number of top population that will be used for reproduction
     mutationRateBest = 0.001 # chance to mutate de best solution
     numberOfEvolution = 100001 # max number o time steps
-    functionType = "kappa" ## only works with kappa and maxwellian
+    functionType = "maxwellian" ## only works with kappa and maxwellian
 
     ####  DATA FOR TEST
     #
     x = [31.5, 53.800,79.800, 108.30, 143.5,183.40,226.10,231.80,342.10,464.40,593.0,741.60, 901.80, 1077.7, 1547.0,1701.0, 2275.0, 2651.0,3681.0, 4216.0 ]
     y = []
+    x = np.asarray(x)
     #  creates data for test
     #  
     # kappa is defined here as 

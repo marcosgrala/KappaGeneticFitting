@@ -4,6 +4,7 @@
 
 import numpy as np
 import random
+import time
 import matplotlib.pyplot as plt
 from dna import *
 
@@ -17,15 +18,13 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
     population = [0]*populationSize
     if functionType == "kappa":
         for i in xrange(populationSize):
-            solution = DNA_kappa()
-            population[i] = solution
+            population[i] = DNA_kappa()
     elif functionType == "maxwellian":
         for i in xrange(populationSize):
-            solution = DNA_maxwellian()
-            population[i] = solution    
+            population[i] = DNA_maxwellian()    
         
     population = sorting(population,x,y,mean)
-
+    startTime = time.time()
     for t in xrange(numberOfEvolution):
         poolSelection = []
         poolSelection = selection(population,threshold)
@@ -35,9 +34,11 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
         mutationRate = (t%100)/100.
         population = mutation(population,mutationRate,mutationRateBest)
         population = sorting(population,x,y,mean)
-        if t%500==0 : 
+        if t%500==0 :
+            loopTime = time.time() 
             population[0].calcCorrelation(x,y,mean)
-            print population[0]
+            print loopTime-startTime,population[0]
+            startTime = loopTime
 
             if functionType == "kappa":
                 coef = [1/population[0].genes[0],population[0].genes[1],1/population[0].genes[2]]
@@ -58,23 +59,29 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
     
 ## add other functions here
 def kappa(x,coef): ## KAPPA DISTRIBUTION FUNCTION
-    size = len(x)
-    func = np.zeros(size)
-    mean = 0
-    for i in xrange(size):
-        func[i] = coef[0]*x[i]*(1+coef[1]*x[i])**(-coef[2])
-        mean += func[i]
-    mean = mean/size
+    #size = len(x)
+    #func = np.zeros(size)
+    #mean = 0
+    #for i in xrange(size):
+    #    func[i] = coef[0]*x[i]*(1+coef[1]*x[i])**(-coef[2])
+    #    mean += func[i]
+    #mean = mean/size
+    #x = np.asarray(x)
+    func = coef[0]*x[:]*(1+coef[1]*x[:])**(-coef[2])
+    mean = sum(func)/len(x)
     return func,mean
         
 def function(x,coef): # FOR NOW MAXWELLIAN DISTRIBUTION
-    size = len(x)
-    func = np.zeros(size)
-    mean = 0
-    for i in xrange(size):
-        func[i] = coef[0]*x[i]*np.exp(-coef[1]*x[i])
-        mean += func[i]
-    mean = mean/size
+    #size = len(x)
+    #func = np.zeros(size)
+    #mean = 0
+    #for i in xrange(size):
+    #    func[i] = coef[0]*x[i]*np.exp(-coef[1]*x[i])
+    #    mean += func[i]
+    #mean = mean/size
+    #x = np.asarray(x)
+    func = coef[0]*x[:]*np.exp(-coef[1]*x[:])
+    mean = sum(func)/len(x)
     return func,mean
     
 def sorting(population,x,objective,mean):
@@ -120,8 +127,11 @@ def reproduction(pool,population,limit,sizeTotal,functionType):
     #reproduce the rest of the population with new agents
     arrayLimit = int(len(population)*limit)
     newPopulation = [0]*sizeTotal
-    for i in xrange(arrayLimit):
-       newPopulation[i] = population[i]
+    #for i in xrange(arrayLimit):
+    #   newPopulation[i] = population[i]
+    newPopulation[0:arrayLimit] = population[0:arrayLimit]
+
+
     poolSize = len(pool)
     for r in xrange(arrayLimit,sizeTotal):
         parentA = pool[random.randrange(0,poolSize)]
