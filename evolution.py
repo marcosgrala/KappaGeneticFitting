@@ -4,7 +4,6 @@
 
 import numpy as np
 import random
-import time
 import matplotlib.pyplot as plt
 from dna import *
 
@@ -12,9 +11,10 @@ from dna import *
 def evolve(functionType,populationSize,threshold,mutationRateBest,
            numberOfEvolution,x,y,mean):
     
-    plt.loglog(x,y)
+    #plt.loglog(x,y)
     plt.ion()
-
+    fig = plt.figure() 
+    plt.loglog(x,y)
     population = [0]*populationSize
     if functionType == "kappa":
         for i in xrange(populationSize):
@@ -24,7 +24,7 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
             population[i] = DNA_maxwellian()    
         
     population = sorting(population,x,y,mean)
-    startTime = time.time()
+
     for t in xrange(numberOfEvolution):
         poolSelection = []
         poolSelection = selection(population,threshold)
@@ -34,11 +34,9 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
         mutationRate = (t%100)/100.
         population = mutation(population,mutationRate,mutationRateBest)
         population = sorting(population,x,y,mean)
-        if t%500==0 :
-            loopTime = time.time() 
+        if t%1500==0 :
             population[0].calcCorrelation(x,y,mean)
-            print loopTime-startTime,population[0]
-            startTime = loopTime
+            print t,population[0]
 
             if functionType == "kappa":
                 coef = [1/population[0].genes[0],population[0].genes[1],1/population[0].genes[2]]
@@ -46,7 +44,7 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
             elif functionType == "maxwellian":
                 coef = [1/population[0].genes[0],population[0].genes[1]]
                 y_population,dumm = function(x,coef)
-
+            #fig.clf()
             plt.loglog(x,y_population) 
             plt.pause(0.00005)
 
@@ -162,8 +160,11 @@ def mutation(population,rate,rateBest):
         #chose one gene to mutate    
         index = random.randrange(0,sizeGenes)
         prob = random.random()
-        if prob<mutationRate: population[i].genes[index] = random.random()
-
+        if prob<mutationRate:
+            num = random.random()
+            if index == 2:
+                while 1/num<=2.5 or 1/num > 150: num = random.random()
+            population[i].genes[index] = num
     return population
 
 ############################################################################################
