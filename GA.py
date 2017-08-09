@@ -16,8 +16,8 @@ def main():
     functionType = "maxwellian" ## only works with kappa and maxwellian
 
     year = 2014
-    month = 2
-    day = 15
+    month = 9
+    day = 12
 
     dateTemp = datetime.datetime(int(year), int(month), int(day))
     date = '%04d%02d%02d' % (dateTemp.year, dateTemp.month, dateTemp.day)
@@ -29,7 +29,9 @@ def main():
         if fnmatch.fnmatch(file, '*'+date+'*'):
             get = False
 
-    xt,yt = data.flux_values(year, month, day, 13 , 42, 40, get)
+    #13 42 40
+    #10 00 00
+    xt,yt = data.flux_values(year, month, day, 10, 0, 0, get)
 
     index = []
     #removing nan from arrays

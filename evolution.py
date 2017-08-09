@@ -34,7 +34,7 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
         mutationRate = (t%100)/100.
         population = mutation(population,mutationRate,mutationRateBest)
         population = sorting(population,x,y,mean)
-        if t%1500==0 :
+        if t%500==0 :
             population[0].calcCorrelation(x,y,mean)
             print t,population[0]
 

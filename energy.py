@@ -4,7 +4,7 @@
 import datetime
 import numpy as np
 import glob
-import os, re, ssl, urllib
+import os, re, ssl, urllib,fnmatch
 from spacepy import pycdf
 from scipy import interpolate as interp
 
@@ -22,14 +22,14 @@ def fill_nan(A):
      return B
 
 # Extract the variables of interest from mageis .cdf file
-def extract_mageis(files_mageis, flag):
+def extract_mageis(files_mageis, flag, dir):
     var_mageis = ['Epoch', 'FEDU_Energy', 'FESA', 'FESA_ERROR']
     mageis = []
     for v in var_mageis:
         mageis.append([])
-        for l in files_mageis:
-            data_mageis = pycdf.CDF(l)
-            mageis[len(mageis)-1].extend(data_mageis[v][...])
+        
+        data_mageis = pycdf.CDF(dir+files_mageis)
+        mageis[len(mageis)-1].extend(data_mageis[v][...])
 
     for m in mageis[2]:
         m[m == -9999999999999999635896294965248.000] = 'NaN'
@@ -50,7 +50,9 @@ def flux_values(year, month, day, hour, minute, second, download_data):
     t_0 = datetime.datetime(int(year),01,01,0,0,0)
     instantEnergyDistr = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
     instSeconds = (instantEnergyDistr - t_0).total_seconds()
+    
     str_temp_mageis = '.*(%04d%02d%02d).*' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
+    date = '%04d%02d%02d' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
 
     if download_data:
         print('Downloading the VAP-A-MagEis data... \n\n')
@@ -74,14 +76,17 @@ def flux_values(year, month, day, hour, minute, second, download_data):
         downfile.retrieve(host+aa, dataDownlDir+aa)
         print('Downloaded: ' + aa)
 
-    files_mageis = []
-    for names in str_temp_mageis:
-        local_file_mageis = dataDownlDir + '*' + names[3:-3] + '*'
-        files_mageis.append(glob.glob(local_file_mageis)[0])
-    files_mageis.sort()
+    #files_mageis = []
+    #for names in str_temp_mageis:
+    #    local_file_mageis = dataDownlDir + '*' + names[3:-3] + '*'
+    for file in os.listdir(dataDownlDir):
+        if fnmatch.fnmatch(file, '*'+date+'*'):
+            files_mageis = file
+    
+    #files_mageis.sort()
 
     # read the mageis cdf file
-    mageis = extract_mageis(files_mageis, 0)
+    mageis = extract_mageis(files_mageis, 0,dataDownlDir)
 
     ## Separate the electron energy channels
     energy = np.asmatrix(mageis[2])[:,4:]
@@ -93,7 +98,7 @@ def flux_values(year, month, day, hour, minute, second, download_data):
     for x in range(0,len(magEpoch)):
         if (magEpoch[x]-t_0).total_seconds() >= (instSeconds-10.9) and (magEpoch[x]-t_0).total_seconds() <= (instSeconds + 10.9):
             instant = x
-
+           
     flux = []
     flux_error = []
     for x in range(0,len(energy_values)):
