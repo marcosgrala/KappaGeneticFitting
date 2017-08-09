@@ -13,7 +13,7 @@ def main():
     threshold = 0.10 # number of top population that will be used for reproduction
     mutationRateBest = 0.001 # chance to mutate de best solution
     numberOfEvolution = 100001 # max number o time steps
-    functionType = "kappa" ## only works with kappa and maxwellian
+    functionType = "maxwellian" ## only works with kappa and maxwellian
 
     year = 2014
     month = 2
