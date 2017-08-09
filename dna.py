@@ -3,7 +3,7 @@
 # created by Marcos Grala
 
 import numpy as np
-import random
+import random, math
 import evolution as evo
 
 # DNA when fitting with maxwellian distribution, only work with these two

@@ -100,6 +100,7 @@ def flux_values(year, month, day, hour, minute, second, download_data):
         flux.append(energy[instant,x])
         flux_error.append(error[instant,x])
 
-    nflux = fill_nan(np.asarray(flux))
+    #nflux = fill_nan(np.asarray(flux))
 
-    return magEpoch, energy_values, nflux, flux_error
+    #return magEpoch, energy_values, nflux, flux_error
+    return energy_values, flux

@@ -2,6 +2,10 @@
 # Created by Marcos Grala
 import numpy as np
 import evolution as evo
+import energy as data
+import os, datetime
+import fnmatch
+
 
 ######    main program           #################################################333      
 def main():
@@ -11,15 +15,33 @@ def main():
     numberOfEvolution = 100001 # max number o time steps
     functionType = "kappa" ## only works with kappa and maxwellian
 
-    ####  DATA FOR TEST
-    #
+    year = 2014
+    month = 2
+    day = 15
 
-    x = [31.5,53.800,79.800,108.30,143.5,183.40,226.10,231.80,342.10,464.40,593.0,741.60,901.80,1077.7,1547.0,2275.0,2651.0,3681.0,4216.0]
-    #y = [1.00330E5, 1.15040E5, 84808, 43422, 18279, 5773.5, 1291.6, 951.76, 18.142, 0.83207]#, 0.91806, 2.7590, 0.42957, 3.1449, 0.68470, 0.14919, 0.31496, 0.12885, 0.55581]
-    y = []
+    dateTemp = datetime.datetime(int(year), int(month), int(day))
+    date = '%04d%02d%02d' % (dateTemp.year, dateTemp.month, dateTemp.day)
 
-    x = np.asarray(x)
-    y = np.asarray(y)
+    get = True
+    path = os.getcwd()
+    dataDownlDir = path + '/data/'    
+    for file in os.listdir(dataDownlDir):
+        if fnmatch.fnmatch(file, '*'+date+'*'):
+            get = False
+
+    xt,yt = data.flux_values(year, month, day, 8 , 0, 0, get)
+
+
+    #removing nan from arrays
+    for i in xrange(len(xt)):
+        if np.isnan(xt[i]):
+            x = np.delete(xt,i)
+            y = np.delete(yt,i)
+
+
+    #x = np.asarray(x)
+    #y = np.asarray(y)
+    #print x,y
     #
     #  creates data for test
     #  
@@ -45,9 +67,8 @@ def main():
     ####
     # main evolution of the code
     evo.evolve(functionType,populationSize,threshold,mutationRateBest,
-           numberOfEvolution,x,y,mean)
+          numberOfEvolution,x,y,mean)
 
     
-
 if __name__ =="__main__":
     main()
