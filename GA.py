@@ -40,7 +40,6 @@ def main():
         x = np.delete(xt,index)
         y = np.delete(yt,index)
 
-    print x,y
     #x = np.asarray(x)
     #y = np.asarray(y)
     #print x,y

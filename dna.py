@@ -8,8 +8,8 @@ import evolution as evo
 
 # DNA when fitting with maxwellian distribution, only work with these two
 class DNA_maxwellian:    
+    
     def __init__(self):
-        #remove append
         self.genes = [0]*2
         for i in xrange(2):
             self.genes[i] = random.random()
@@ -18,7 +18,12 @@ class DNA_maxwellian:
         self.correlation = -1
       
     def __str__(self):
-        return str(self.correlation) + " " + str(1/self.genes[0]) + " " + str(self.genes[1])
+        A = 1/self.genes[0]
+        B = self.genes[1]
+        KbT = 1/B
+        n = (5.946e-9)*A*B**(-1.5)
+
+        return str(self.correlation) + ", n = " + str(n) + ", KbT = " + str(KbT)
     
     # calculate the fitness value for all elements
     def calcFitness(self,x,target,mean):
