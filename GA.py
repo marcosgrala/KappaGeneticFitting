@@ -29,16 +29,18 @@ def main():
         if fnmatch.fnmatch(file, '*'+date+'*'):
             get = False
 
-    xt,yt = data.flux_values(year, month, day, 8 , 0, 0, get)
+    xt,yt = data.flux_values(year, month, day, 13 , 42, 40, get)
 
-
+    index = []
     #removing nan from arrays
     for i in xrange(len(xt)):
-        if np.isnan(xt[i]):
-            x = np.delete(xt,i)
-            y = np.delete(yt,i)
+        if np.isnan(xt[i]) or np.isnan(yt[i]) or yt[i]<1.0:
+            index.append(i)
 
+        x = np.delete(xt,index)
+        y = np.delete(yt,index)
 
+    print x,y
     #x = np.asarray(x)
     #y = np.asarray(y)
     #print x,y
