@@ -41,7 +41,7 @@ def extract_mageis(files_mageis, flag, dir):
     return mageis
 
 
-def flux_values(year, month, day, hour, minute, second, download_data):
+def flux_values(year, month, day, hour, minute, second):
     ####
     # Data directory
     path = os.getcwd()
@@ -53,6 +53,15 @@ def flux_values(year, month, day, hour, minute, second, download_data):
     
     str_temp_mageis = '.*(%04d%02d%02d).*' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
     date = '%04d%02d%02d' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
+    
+
+    ##see if file already exists
+    download_data = True
+    for file in os.listdir(dataDownlDir):
+        if fnmatch.fnmatch(file, '*'+date+'*'):
+            download_data = False
+            files_mageis = file
+
 
     if download_data:
         print('Downloading the VAP-A-MagEis data... \n\n')
@@ -75,15 +84,7 @@ def flux_values(year, month, day, hour, minute, second, download_data):
         downfile = urllib.URLopener()
         downfile.retrieve(host+aa, dataDownlDir+aa)
         print('Downloaded: ' + aa)
-
-    #files_mageis = []
-    #for names in str_temp_mageis:
-    #    local_file_mageis = dataDownlDir + '*' + names[3:-3] + '*'
-    for file in os.listdir(dataDownlDir):
-        if fnmatch.fnmatch(file, '*'+date+'*'):
-            files_mageis = file
-    
-    #files_mageis.sort()
+        files_mageis = aa
 
     # read the mageis cdf file
     mageis = extract_mageis(files_mageis, 0,dataDownlDir)
@@ -94,10 +95,12 @@ def flux_values(year, month, day, hour, minute, second, download_data):
     energy_values = mageis[1][0][4:]
     # epoch
     magEpoch = mageis[0]
-
     for x in range(0,len(magEpoch)):
-        if (magEpoch[x]-t_0).total_seconds() >= (instSeconds-10.9) and (magEpoch[x]-t_0).total_seconds() <= (instSeconds + 10.9):
+        #print (magEpoch[x+1]-magEpoch[x]).total_seconds()
+        #if (magEpoch[x]-t_0).total_seconds() >= (instSeconds-10.9) and (magEpoch[x]-t_0).total_seconds() <= (instSeconds + 10.9):
+        if abs((magEpoch[x]-instantEnergyDistr).total_seconds())<11.0:
             instant = x
+            break
            
     flux = []
     flux_error = []

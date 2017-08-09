@@ -16,22 +16,12 @@ def main():
     functionType = "maxwellian" ## only works with kappa and maxwellian
 
     year = 2014
-    month = 9
-    day = 12
-
-    dateTemp = datetime.datetime(int(year), int(month), int(day))
-    date = '%04d%02d%02d' % (dateTemp.year, dateTemp.month, dateTemp.day)
-
-    get = True
-    path = os.getcwd()
-    dataDownlDir = path + '/data/'    
-    for file in os.listdir(dataDownlDir):
-        if fnmatch.fnmatch(file, '*'+date+'*'):
-            get = False
+    month = 2
+    day = 15
 
     #13 42 40
     #10 00 00
-    xt,yt = data.flux_values(year, month, day, 10, 0, 0, get)
+    xt,yt = data.flux_values(year, month, day, 10, 0, 0)
 
     index = []
     #removing nan from arrays
