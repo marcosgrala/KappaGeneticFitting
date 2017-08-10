@@ -8,19 +8,6 @@ import os, re, ssl, urllib,fnmatch
 from spacepy import pycdf
 from scipy import interpolate as interp
 
-# fill the gaps with nans
-def fill_nan(A):
-     '''
-     interpolate to fill nan values
-     '''
-     if np.isnan(A[0]):
-         A[0] = 0.5
-     inds = np.arange(A.shape[0])
-     good = np.where(np.isfinite(A))
-     f = interp.interp1d(inds[good], A[good], bounds_error=False)
-     B = np.where(np.isfinite(A), A, f(inds))
-     return B
-
 # Extract the variables of interest from mageis .cdf file
 def extract_mageis(files_mageis, flag, dir):
     var_mageis = ['Epoch', 'FEDU_Energy', 'FESA', 'FESA_ERROR']
@@ -46,11 +33,9 @@ def flux_values(year, month, day, hour, minute, second):
     # Data directory
     path = os.getcwd()
     dataDownlDir = path + '/data/'
-
-    t_0 = datetime.datetime(int(year),01,01,0,0,0)
+     
     instantEnergyDistr = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
-    instSeconds = (instantEnergyDistr - t_0).total_seconds()
-    
+   
     str_temp_mageis = '.*(%04d%02d%02d).*' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
     date = '%04d%02d%02d' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
     
@@ -95,12 +80,8 @@ def flux_values(year, month, day, hour, minute, second):
     energy_values = mageis[1][0][4:]
     # epoch
     magEpoch = mageis[0]
-    #maxInt = 0
-    #for x in range(0,len(magEpoch)-1):
-    #    localInt = (magEpoch[x+1]-magEpoch[x]).total_seconds()
-    #    if localInt > maxInt: maxInt = localInt
 
-    #print maxInt
+    
     minDif = 0
     for x in range(0,len(magEpoch)):
         #print (magEpoch[x+1]-magEpoch[x]).total_seconds()
