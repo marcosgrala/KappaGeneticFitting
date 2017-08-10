@@ -32,6 +32,10 @@ def flux_values(year, month, day, hour, minute, second):
     ####
     # Data directory
     path = os.getcwd()
+    
+    if not os.path.exists(path + '/data/'):
+        os.makedirs(path + '/data/')
+        
     dataDownlDir = path + '/data/'
      
     instantEnergyDistr = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
@@ -46,7 +50,7 @@ def flux_values(year, month, day, hour, minute, second):
         if fnmatch.fnmatch(file, '*'+date+'*'):
             download_data = False
             files_mageis = file
-
+   
 
     if download_data:
         print('Downloading the VAP-A-MagEis data... \n\n')
