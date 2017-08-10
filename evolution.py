@@ -11,10 +11,7 @@ from dna import *
 def evolve(functionType,populationSize,threshold,mutationRateBest,
            numberOfEvolution,x,y,mean):
     
-    #plt.loglog(x,y)
-    plt.ion()
-    fig = plt.figure() 
-    plt.loglog(x,y)
+    plt.loglog(x,y,'.')
     population = [0]*populationSize
     if functionType == "kappa":
         for i in xrange(populationSize):
@@ -46,7 +43,8 @@ def evolve(functionType,populationSize,threshold,mutationRateBest,
                 y_population,dumm = function(x,coef)
             #fig.clf()
             plt.loglog(x,y_population) 
-            plt.pause(0.00005)
+            plt.draw()
+            plt.pause(10)
 
     plt.show(block=True)
 

@@ -95,13 +95,22 @@ def flux_values(year, month, day, hour, minute, second):
     energy_values = mageis[1][0][4:]
     # epoch
     magEpoch = mageis[0]
+    #maxInt = 0
+    #for x in range(0,len(magEpoch)-1):
+    #    localInt = (magEpoch[x+1]-magEpoch[x]).total_seconds()
+    #    if localInt > maxInt: maxInt = localInt
+
+    #print maxInt
+    minDif = 0
     for x in range(0,len(magEpoch)):
         #print (magEpoch[x+1]-magEpoch[x]).total_seconds()
+        localDif = abs((magEpoch[x]-instantEnergyDistr).total_seconds())
         #if (magEpoch[x]-t_0).total_seconds() >= (instSeconds-10.9) and (magEpoch[x]-t_0).total_seconds() <= (instSeconds + 10.9):
-        if abs((magEpoch[x]-instantEnergyDistr).total_seconds())<11.0:
+        if localDif<minDif or x==0:
             instant = x
-            break
+            minDif = localDif
            
+    print minDif, instant
     flux = []
     flux_error = []
     for x in range(0,len(energy_values)):
