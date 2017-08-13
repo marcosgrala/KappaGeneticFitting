@@ -14,7 +14,7 @@ def extract_mageis(files_mageis, flag, dir):
     mageis = []
     for v in var_mageis:
         mageis.append([])
-        
+
         data_mageis = pycdf.CDF(dir+files_mageis)
         mageis[len(mageis)-1].extend(data_mageis[v][...])
 
@@ -32,17 +32,17 @@ def flux_values(year, month, day, hour, minute, second):
     ####
     # Data directory
     path = os.getcwd()
-    
+
     if not os.path.exists(path + '/data/'):
         os.makedirs(path + '/data/')
-        
+
     dataDownlDir = path + '/data/'
-     
+
     instantEnergyDistr = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
-   
+
     str_temp_mageis = '.*(%04d%02d%02d).*' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
     date = '%04d%02d%02d' % (instantEnergyDistr.year, instantEnergyDistr.month, instantEnergyDistr.day)
-    
+
 
     ##see if file already exists
     download_data = True
@@ -50,7 +50,7 @@ def flux_values(year, month, day, hour, minute, second):
         if fnmatch.fnmatch(file, '*'+date+'*'):
             download_data = False
             files_mageis = file
-   
+
 
     if download_data:
         print('Downloading the VAP-A-MagEis data... \n\n')
@@ -85,24 +85,20 @@ def flux_values(year, month, day, hour, minute, second):
     # epoch
     magEpoch = mageis[0]
 
-    
+
     minDif = 0
     for x in range(0,len(magEpoch)):
-        #print (magEpoch[x+1]-magEpoch[x]).total_seconds()
         localDif = abs((magEpoch[x]-instantEnergyDistr).total_seconds())
-        #if (magEpoch[x]-t_0).total_seconds() >= (instSeconds-10.9) and (magEpoch[x]-t_0).total_seconds() <= (instSeconds + 10.9):
         if localDif<minDif or x==0:
             instant = x
             minDif = localDif
-           
+
     print minDif, instant
     flux = []
     flux_error = []
     for x in range(0,len(energy_values)):
         flux.append(energy[instant,x])
         flux_error.append(error[instant,x])
-
-    #nflux = fill_nan(np.asarray(flux))
 
     #return magEpoch, energy_values, nflux, flux_error
     return energy_values, flux
