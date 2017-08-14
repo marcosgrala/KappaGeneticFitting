@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import energy as data
 import math
 import matplotlib
+from matplotlib.offsetbox import AnchoredText
 
 
 def kappa(x,n, kbt, kap): ## KAPPA DISTRIBUTION FUNCTION
@@ -44,10 +45,15 @@ def plot_data(param_kappa, param_maxw,year, month, day, hour, minute, second, sa
 
 
     title_twoFunc = '$%02d/%02d/%s$ - $%02d:%02d:%02d$  - $Kappa$ $e$ $Mawelliana$' %(int(day), int(month), str(year), int(hour), int(minute), int(second))
+    title_kappa = '$%02d/%02d/%s$ - $%02d:%02d:%02d$  - $Kappa$' %(int(day), int(month), str(year), int(hour), int(minute), int(second))
+    title_maxw = '$%02d/%02d/%s$ - $%02d:%02d:%02d$  - $Mawelliana$' %(int(day), int(month), str(year), int(hour), int(minute), int(second))
     figname_twoFunc = 'twoFunc_%s%02d%02d_%02d%02d%02d.png' %(str(year), int(month), int(day), int(hour), int(minute), int(second))
+    figname_kappa = 'kappa_%s%02d%02d_%02d%02d%02d.png' %(str(year), int(month), int(day), int(hour), int(minute), int(second))
+    figname_maxw = 'maxw_%s%02d%02d_%02d%02d%02d.png' %(str(year), int(month), int(day), int(hour), int(minute), int(second))
     title_kappa = '$%02d/%02d/%s$ - $Kappa$' %(int(day), int(month), str(year))
     title_maxw = '$%02d/%02d/%s$ - $Mawelliana$' %(int(day), int(month), str(year))
 
+    # two functions
     plt.figure(figsize=(8, 7))
     plt.loglog(x,y, '.', label='$Dados$')
     plt.loglog(x,yy_k, label='$FD - \kappa$')
@@ -62,3 +68,35 @@ def plot_data(param_kappa, param_maxw,year, month, day, hour, minute, second, sa
 
     if save_plot:
         plt.savefig(figname_twoFunc, format = 'png')
+
+    # kappa
+    plt.figure(figsize=(8, 7))
+    plt.loglog(x,y, '.', label='$Dados$')
+    plt.loglog(x,yy_k, label='$FD - \kappa$')
+    plt.legend()
+    plt.grid()
+    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}MeV^{-1}]$')
+    plt.xlabel('$E$ $[keV]$')
+    plt.title(title_kappa)
+    plt.ylim(0, 5e5)
+    plt.text(30,20,"$\kappa = %.4f$\n$KbT = %.4f$\n$n = %.4f$" %(param_kappa[2], param_kappa[1], param_kappa[0]))
+
+
+    if save_plot:
+        plt.savefig(figname_kappa, format = 'png')
+
+    # MAxwelliana
+    plt.figure(figsize=(8, 7))
+    plt.loglog(x,y, '.', label='$Dados$')
+    plt.loglog(x,yy_k, label='$FD - m$')
+    plt.legend()
+    plt.grid()
+    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}MeV^{-1}]$')
+    plt.xlabel('$E$ $[keV]$')
+    plt.title(title_maxw)
+    plt.ylim(0, 5e5)
+    plt.text(30,20,"$KbT = %.4f$\n$n = %.4f$" %(param_maxw[1], param_maxw[0]))
+
+
+    if save_plot:
+        plt.savefig(figname_maxw, format = 'png')
