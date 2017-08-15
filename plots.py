@@ -50,8 +50,6 @@ def plot_data(param_kappa, param_maxw,year, month, day, hour, minute, second, sa
     figname_twoFunc = 'twoFunc_%s%02d%02d_%02d%02d%02d.png' %(str(year), int(month), int(day), int(hour), int(minute), int(second))
     figname_kappa = 'kappa_%s%02d%02d_%02d%02d%02d.png' %(str(year), int(month), int(day), int(hour), int(minute), int(second))
     figname_maxw = 'maxw_%s%02d%02d_%02d%02d%02d.png' %(str(year), int(month), int(day), int(hour), int(minute), int(second))
-    title_kappa = '$%02d/%02d/%s$ - $Kappa$' %(int(day), int(month), str(year))
-    title_maxw = '$%02d/%02d/%s$ - $Mawelliana$' %(int(day), int(month), str(year))
 
     # two functions
     plt.figure(figsize=(8, 7))
@@ -60,10 +58,10 @@ def plot_data(param_kappa, param_maxw,year, month, day, hour, minute, second, sa
     plt.loglog(x,yy_m, label='$FD - m$')
     plt.legend()
     plt.grid()
-    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}MeV^{-1}]$')
+    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}keV^{-1}]$')
     plt.xlabel('$E$ $[keV]$')
     plt.title(title_twoFunc)
-    plt.ylim(0, 5e5)
+    plt.ylim([1, 5e5])
 
 
     if save_plot:
@@ -75,10 +73,10 @@ def plot_data(param_kappa, param_maxw,year, month, day, hour, minute, second, sa
     plt.loglog(x,yy_k, label='$FD - \kappa$')
     plt.legend()
     plt.grid()
-    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}MeV^{-1}]$')
+    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}keV^{-1}]$')
     plt.xlabel('$E$ $[keV]$')
     plt.title(title_kappa)
-    plt.ylim(0, 5e5)
+    plt.ylim([1, 5e5])
     plt.text(30,20,"$\kappa = %.4f$\n$KbT = %.4f$\n$n = %.4f$" %(param_kappa[2], param_kappa[1], param_kappa[0]))
 
 
@@ -88,15 +86,18 @@ def plot_data(param_kappa, param_maxw,year, month, day, hour, minute, second, sa
     # MAxwelliana
     plt.figure(figsize=(8, 7))
     plt.loglog(x,y, '.', label='$Dados$')
-    plt.loglog(x,yy_k, label='$FD - m$')
+    plt.loglog(x,yy_m, label='$FD - m$')
     plt.legend()
     plt.grid()
-    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}MeV^{-1}]$')
+    plt.ylabel('$Flux$ $[cm^{-2}s^{-1}keV^{-1}]$')
     plt.xlabel('$E$ $[keV]$')
     plt.title(title_maxw)
-    plt.ylim(0, 5e5)
+    plt.ylim([1, 5e5])
     plt.text(30,20,"$KbT = %.4f$\n$n = %.4f$" %(param_maxw[1], param_maxw[0]))
 
 
     if save_plot:
         plt.savefig(figname_maxw, format = 'png')
+
+
+plot_data([0.0102483231877,  14.2045384407, 39.4750094769], [0.01116356564, 16.1137178057], 2014, 9, 12, 9, 30, 00, save_plot=True)
